@@ -1,0 +1,15 @@
+{
+  "name": "bidcraft",
+  "private": true,
+  "description": "Task runner for BidCraft (replaces make -- npm is installed everywhere, make is not, notably on Windows without extra tooling).",
+  "scripts": {
+    "up": "docker compose up --build",
+    "down": "docker compose down -v",
+    "db": "docker compose up -d db",
+    "test": "cd backend && go test ./...",
+    "test:race": "docker compose --profile test run --rm backend-test",
+    "test:integration": "docker compose --profile test up -d db-test && cd backend && go test -tags=integration ./internal/repository/...",
+    "stress": "cd backend && go run ./cmd/stress",
+    "fmt": "cd backend && go fmt ./... && cd ../frontend && npx prettier -w src --log-level warn"
+  }
+}
