@@ -1,0 +1,28 @@
+# Go
+backend/bidcraft
+backend/stress
+/backend/bin/
+*.exe
+*.test
+*.out
+
+# Node / Astro
+node_modules/
+frontend/dist/
+frontend/.astro/
+
+# Env
+.env
+.env.local
+*.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
