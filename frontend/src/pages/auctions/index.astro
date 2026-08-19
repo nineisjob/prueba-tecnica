@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FilterBar from '../../components/astro/FilterBar.astro';
+import AuctionGrid from '../../components/astro/AuctionGrid.astro';
+import { api } from '../../lib/api';
+
+const status = Astro.url.searchParams.get('status') ?? 'all';
+
+let auctions: Awaited<ReturnType<typeof api.listAuctions>>['data'] = [];
+let loadError = false;
+try {
+  const res = await api.listAuctions(status === 'all' ? undefined : status);
+  auctions = res.data;
+} catch {
+  loadError = true;
+}
+---
+
+<BaseLayout title="Subastas" description="Catálogo de subastas de arte digital.">
+  <h1 class="mb-6 text-2xl font-bold text-slate-900 dark:text-slate-50">Subastas</h1>
+  <FilterBar current={status} />
+  {loadError ? (
+    <p class="text-sm text-red-500">No se pudo cargar el catálogo. Intenta de nuevo.</p>
+  ) : (
+    <AuctionGrid auctions={auctions} />
+  )}
+</BaseLayout>

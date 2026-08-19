@@ -1,0 +1,22 @@
+---
+import AuctionCard from './AuctionCard.astro';
+import EmptyState from './EmptyState.astro';
+import type { AuctionDetail } from '../../lib/types';
+
+interface Props {
+  auctions: AuctionDetail[];
+}
+const { auctions } = Astro.props;
+---
+
+{
+  auctions.length === 0 ? (
+    <EmptyState />
+  ) : (
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {auctions.map((auction) => (
+        <AuctionCard auction={auction} />
+      ))}
+    </div>
+  )
+}

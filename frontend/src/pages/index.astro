@@ -1,0 +1,29 @@
+---
+export const prerender = true;
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/astro/Hero.astro';
+---
+
+<BaseLayout title="Inicio">
+  <Hero />
+
+  <section class="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-3">
+    <div>
+      <h2 class="font-semibold text-slate-900 dark:text-slate-50">Sin condiciones de carrera</h2>
+      <p class="mt-1 text-sm text-slate-500">
+        Un actor por subasta serializa cada puja y su expiración en un único punto de decisión.
+      </p>
+    </div>
+    <div>
+      <h2 class="font-semibold text-slate-900 dark:text-slate-50">Cierre exacto</h2>
+      <p class="mt-1 text-sm text-slate-500">
+        Ninguna puja se acepta en o después del instante de cierre — garantizado en tres capas.
+      </p>
+    </div>
+    <div>
+      <h2 class="font-semibold text-slate-900 dark:text-slate-50">Tiempo real</h2>
+      <p class="mt-1 text-sm text-slate-500">WebSockets con salas independientes por subasta y reconexión automática.</p>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LiveBiddingRoom from '../../components/react/LiveBiddingRoom';
+import { api, ApiError } from '../../lib/api';
+
+const { id } = Astro.params;
+
+let auction;
+let bids: Awaited<ReturnType<typeof api.listBids>>['data'] = [];
+let notFound = false;
+
+try {
+  auction = await api.getAuction(id!);
+  bids = (await api.listBids(id!, 20)).data;
+} catch (err) {
+  if (err instanceof ApiError && err.status === 404) {
+    notFound = true;
+  } else {
+    throw err;
+  }
+}
+---
+
+<BaseLayout title={notFound ? 'No encontrada' : auction!.title} description={auction?.description}>
+  {
+    notFound ? (
+      <div class="py-24 text-center">
+        <h1 class="text-2xl font-bold">Subasta no encontrada</h1>
+        <a href="/auctions" class="mt-4 inline-block text-indigo-600 hover:underline dark:text-indigo-400">
+          Volver al catálogo
+        </a>
+      </div>
+    ) : (
+      // client:load: this is the one genuinely stateful surface on the
+      // page (countdown, live price, bid form, WS feed) -- everything
+      // else on the site ships zero client JS.
+      <LiveBiddingRoom client:load auction={auction!} initialBids={bids} />
+    )
+  }
+</BaseLayout>

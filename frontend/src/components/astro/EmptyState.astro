@@ -1,0 +1,10 @@
+---
+interface Props {
+  message?: string;
+}
+const { message = 'No hay subastas en este filtro todavía.' } = Astro.props;
+---
+
+<div class="rounded-xl border border-dashed border-slate-300 py-16 text-center text-slate-400 dark:border-slate-700">
+  {message}
+</div>

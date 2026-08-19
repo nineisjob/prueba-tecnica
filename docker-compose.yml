@@ -1,0 +1,90 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: bidcraft
+      POSTGRES_PASSWORD: bidcraft
+      POSTGRES_DB: bidcraft
+    ports:
+      - "5433:5432" # 5432 is very often already taken by a local Postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data # named volume: a host bind mount fails initdb on Windows
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bidcraft -d bidcraft"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+
+  backend:
+    build:
+      context: ./backend
+      target: runtime
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://bidcraft:bidcraft@db:5432/bidcraft?sslmode=disable
+      PORT: 8080
+      JWT_SECRET: dev-secret-change-me
+      DEFAULT_MIN_INCREMENT_CENTS: 100
+      CORS_ALLOWED_ORIGINS: http://localhost:4321
+      SEED_DEMO_DATA: "true"
+      MIGRATE_ON_START: "true"
+      LOG_LEVEL: info
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "/app/bidcraft", "-healthcheck"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+
+  frontend:
+    build:
+      context: ./frontend
+      target: runtime
+    depends_on:
+      backend:
+        condition: service_healthy
+    environment:
+      HOST: 0.0.0.0
+      PORT: 4321
+      API_INTERNAL_URL: http://backend:8080
+      PUBLIC_API_URL: http://localhost:8080
+    ports:
+      - "4321:4321"
+
+  # ---- test-only services, not started by `docker compose up` ----
+  db-test:
+    profiles: [test]
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: bidcraft
+      POSTGRES_PASSWORD: bidcraft
+      POSTGRES_DB: bidcraft_test
+    tmpfs:
+      - /var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bidcraft -d bidcraft_test"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+
+  backend-test:
+    profiles: [test]
+    build:
+      context: ./backend
+      target: test
+    depends_on:
+      db-test:
+        condition: service_healthy
+    environment:
+      TEST_DATABASE_URL: postgres://bidcraft:bidcraft@db-test:5432/bidcraft_test?sslmode=disable
+
+volumes:
+  pgdata:

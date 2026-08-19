@@ -1,0 +1,21 @@
+---
+interface Props {
+  status: 'created' | 'active' | 'finished';
+}
+const { status } = Astro.props;
+
+const styles: Record<string, string> = {
+  created: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300',
+  active: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400',
+  finished: 'bg-slate-200 text-slate-500 dark:bg-slate-800 dark:text-slate-400',
+};
+const labels: Record<string, string> = {
+  created: 'Próxima',
+  active: 'Activa',
+  finished: 'Finalizada',
+};
+---
+
+<span class={`inline-block rounded-full px-2.5 py-1 text-xs font-semibold ${styles[status]}`}>
+  {labels[status]}
+</span>
