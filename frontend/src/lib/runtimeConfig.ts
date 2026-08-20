@@ -16,9 +16,14 @@ export function getApiUrl(): string {
   if (typeof window !== 'undefined' && window.__BIDCRAFT__) {
     return window.__BIDCRAFT__.apiUrl;
   }
-  // SSR: prefer the internal Docker DNS name; fall back to localhost for
-  // `astro dev` outside a container.
-  return import.meta.env.API_INTERNAL_URL || 'http://localhost:8080';
+  // SSR: read dynamically from process.env at runtime.
+  // In Docker, API_INTERNAL_URL is 'http://backend:8080'.
+  // In local dev outside Docker, falls back to 'http://localhost:8080'.
+  if (typeof process !== 'undefined' && process.env) {
+    if (process.env.API_INTERNAL_URL) return process.env.API_INTERNAL_URL;
+    if (process.env.PUBLIC_API_URL) return process.env.PUBLIC_API_URL;
+  }
+  return 'http://localhost:8080';
 }
 
 export function getWsUrl(): string {
@@ -29,5 +34,8 @@ export function getWsUrl(): string {
 }
 
 export function getPublicApiUrl(): string {
-  return import.meta.env.PUBLIC_API_URL || 'http://localhost:8080';
+  if (typeof process !== 'undefined' && process.env?.PUBLIC_API_URL) {
+    return process.env.PUBLIC_API_URL;
+  }
+  return 'http://localhost:8080';
 }

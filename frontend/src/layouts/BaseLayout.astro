@@ -13,7 +13,9 @@ const { title, description = 'BidCraft — subastas de arte digital en tiempo re
 // Injected at RUNTIME (not build time) so one built image works against any
 // host: PUBLIC_API_URL is read from the server's environment on each
 // request, not inlined by Vite. See src/lib/runtimeConfig.ts.
-const publicApiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:8080';
+const publicApiUrl =
+  (typeof process !== 'undefined' && process.env?.PUBLIC_API_URL) ||
+  'http://localhost:8080';
 ---
 
 <!doctype html>
