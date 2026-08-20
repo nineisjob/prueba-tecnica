@@ -20,7 +20,17 @@ try {
   <h1 class="mb-6 text-2xl font-bold text-slate-900 dark:text-slate-50">Subastas</h1>
   <FilterBar current={status} />
   {loadError ? (
-    <p class="text-sm text-red-500">No se pudo cargar el catálogo. Intenta de nuevo.</p>
+    <div class="rounded-xl border border-red-200 bg-red-50 p-6 text-center dark:border-red-900/50 dark:bg-red-950/20">
+      <p class="text-sm font-medium text-red-700 dark:text-red-400">
+        No se pudo cargar el catálogo de subastas.
+      </p>
+      <button
+        onclick="window.location.reload()"
+        class="mt-4 inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
+      >
+        Reintentar
+      </button>
+    </div>
   ) : (
     <AuctionGrid auctions={auctions} />
   )}
