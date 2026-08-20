@@ -3,9 +3,13 @@ export const prerender = true;
 
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/astro/Hero.astro';
+import HeaderAuth from '../components/react/HeaderAuth';
 ---
 
 <BaseLayout title="Inicio">
+  <div class="mb-8 flex justify-end">
+    <HeaderAuth client:load />
+  </div>
   <Hero />
 
   <section class="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-3">

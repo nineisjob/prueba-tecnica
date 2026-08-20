@@ -1,0 +1,119 @@
+### BidCraft API Requests
+### Use REST Client extension in VS Code to run these
+
+@baseUrl = http://localhost:8080/api/v1
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pbmUiLCJzdWIiOiJkZWMwMzE5NS1kYzJlLTRjYjktOGNhNy1mMjg5ZmU2ZWNkYjMiLCJleHAiOjE3ODcyODgxMDksImlhdCI6MTc4NzIwMTcwOX0.U8EGdpRrhf4yIWujlrjShl4_ol9RgzAehNA6XFmUnb8
+
+### ============================================
+### 1. AUTH - Login
+### ============================================
+
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "alice@bidcraft.dev",
+  "password": "demo1234"
+}
+
+### After login, copy the token and set @token variable above
+
+### ============================================
+### 2. AUTH - Get current user
+### ============================================
+
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{token}}
+
+### ============================================
+### 3. AUCTIONS - List all auctions
+### ============================================
+
+GET {{baseUrl}}/auctions
+
+### ============================================
+### 4. AUCTIONS - List active auctions only
+### ============================================
+
+GET {{baseUrl}}/auctions?status=active
+
+### ============================================
+### 5. AUCTIONS - List finished auctions
+### ============================================
+
+GET {{baseUrl}}/auctions?status=finished
+
+### ============================================
+### 6. AUCTIONS - Create new auction
+### ============================================
+
+POST {{baseUrl}}/auctions
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Digital Art Piece #001",
+  "description": "A beautiful digital artwork created with modern techniques",
+  "image_url": "https://images.unsplash.com/photo-1579783902614-e3fb66017edd?w=500",
+  "base_price_cents": 50000,
+  "min_increment_cents": 1000,
+  "starts_in_seconds": 0,
+  "duration_seconds": 3600
+}
+
+### ============================================
+### 7. AUCTIONS - Get auction by ID
+### ============================================
+
+GET {{baseUrl}}/auctions/AUCTION_ID_HERE
+
+### ============================================
+### 8. AUCTIONS - Get auction bids history
+### ============================================
+
+GET {{baseUrl}}/auctions/AUCTION_ID_HERE/bids
+
+### ============================================
+### 9. BIDS - Place a bid
+### ============================================
+
+POST {{baseUrl}}/auctions/AUCTION_ID_HERE/bids
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "amount_cents": 75000
+}
+
+### ============================================
+### 10. AUTH - Login as different user (bob)
+### ============================================
+
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "bob@bidcraft.dev",
+  "password": "demo1234"
+}
+
+### ============================================
+### 11. AUTH - Login as different user (carol)
+### ============================================
+
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "carol@bidcraft.dev",
+  "password": "demo1234"
+}
+
+### ============================================
+### NOTES:
+### - Install "REST Client" extension in VS Code by Huachao Mao
+### - Click "Send Request" above each request to execute
+### - Responses appear in a side panel
+### - For endpoints needing AUCTION_ID, replace with actual ID from list response
+### - For @token variable, run login first, then copy the "token" from response
+### ============================================
