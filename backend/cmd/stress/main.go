@@ -81,7 +81,7 @@ func parseFlags() config {
 	var c config
 	flag.StringVar(&c.base, "base", "http://localhost:8080", "backend base URL")
 	flag.IntVar(&c.users, "users", 20, "number of distinct bidders")
-	flag.IntVar(&c.concurrency, "concurrency", 500, "number of simultaneous bid requests")
+	flag.IntVar(&c.concurrency, "concurrency", 100, "number of simultaneous bid requests")
 	flag.StringVar(&c.mode, "mode", "burst", "burst | tie")
 	flag.IntVar(&c.durationSeconds, "duration-seconds", 30, "duration of the auction created for the test")
 	flag.Int64Var(&c.incrementCents, "increment-cents", 100, "minimum increment for the created auction")
